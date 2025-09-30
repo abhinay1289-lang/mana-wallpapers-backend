@@ -16,7 +16,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <stripe.version>25.6.0</stripe.version>
         <jwt.version>0.12.3</jwt.version>
     </properties>
 
@@ -79,11 +78,11 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Stripe -->
+        <!-- Razorpay -->
         <dependency>
-            <groupId>com.stripe</groupId>
-            <artifactId>stripe-java</artifactId>
-            <version>${stripe.version}</version>
+            <groupId>com.razorpay</groupId>
+            <artifactId>razorpay-java</artifactId>
+            <version>1.4.3</version>
         </dependency>
 
         <!-- AWS S3 -->

@@ -8,7 +8,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class CheckoutResponse {
-    private String sessionId;
-    private String checkoutUrl;
     private UUID orderId;
+    private String razorpayOrderId;
 }
