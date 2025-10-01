@@ -22,7 +22,7 @@ import java.util.UUID;
 public class DownloadService {
 
     private final DownloadRepository downloadRepository;
-    private final S3Service s3Service;
+    private final StorageService storageService;
     private final WallpaperRepository wallpaperRepository;
 
     public void createDownloadTokens(Order order) {
@@ -60,7 +60,7 @@ public class DownloadService {
         downloadRepository.save(download);
 
         // Generate presigned URL
-        return s3Service.generatePresignedDownloadUrl(download.getWallpaper().getFileKey());
+        return storageService.generatePresignedDownloadUrl(download.getWallpaper().getFileKey());
     }
 
     public Download createFreeDownload(UUID wallpaperId, User user, String ipAddress) {

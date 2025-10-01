@@ -19,7 +19,7 @@ import java.util.UUID;
 public class WallpaperService {
 
     private final WallpaperRepository wallpaperRepository;
-    private final S3Service s3Service;
+    private final StorageService storageService;
 
     public Page<WallpaperDto> getAllWallpapers(Pageable pageable, String category, String query, Boolean free) {
         Page<Wallpaper> wallpapers;
@@ -75,10 +75,10 @@ public class WallpaperService {
             throw new SecurityException("Not authorized to delete this wallpaper");
         }
 
-        // Delete from S3
-        s3Service.deleteObject(wallpaper.getFileKey());
+        // Delete from Storage
+        storageService.deleteObject(wallpaper.getFileKey());
         if (wallpaper.getThumbnailKey() != null) {
-            s3Service.deleteObject(wallpaper.getThumbnailKey());
+            storageService.deleteObject(wallpaper.getThumbnailKey());
         }
 
         wallpaperRepository.delete(wallpaper);
@@ -86,7 +86,7 @@ public class WallpaperService {
 
     public String generateUploadUrl(String filename, String contentType) {
         String key = "wallpapers/" + UUID.randomUUID() + "/" + filename;
-        return s3Service.generatePresignedUploadUrl(key, contentType);
+        return storageService.generatePresignedUploadUrl(key, contentType);
     }
 
     private WallpaperDto convertToDto(Wallpaper wallpaper) {
@@ -107,7 +107,7 @@ public class WallpaperService {
         dto.setUpdatedAt(wallpaper.getUpdatedAt());
 
         if (wallpaper.getThumbnailKey() != null) {
-            dto.setThumbnailUrl(s3Service.generatePresignedDownloadUrl(wallpaper.getThumbnailKey()));
+            dto.setThumbnailUrl(storageService.generatePresignedDownloadUrl(wallpaper.getThumbnailKey()));
         }
 
         return dto;
