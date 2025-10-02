@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.1</version>
         <relativePath/>
     </parent>
+
     <groupId>com.manawallpapers</groupId>
     <artifactId>mana-wallpapers-backend</artifactId>
     <version>1.0.0</version>
@@ -19,19 +22,8 @@
         <jwt.version>0.12.3</jwt.version>
         <supabase.version>2.3.0</supabase.version>
         <kotlin.version>1.9.22</kotlin.version>
+        <coroutines.version>1.7.3</coroutines.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.github.jan-tennert.supabase</groupId>
-                <artifactId>supabase-bom</artifactId>
-                <version>${supabase.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- Spring Boot Starters -->
@@ -93,23 +85,33 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Supabase -->
+        <!-- Supabase (Kotlin library) -->
         <dependency>
             <groupId>io.github.jan-tennert.supabase</groupId>
             <artifactId>storage-kt</artifactId>
+            <version>${supabase.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-jdk8</artifactId>
+            <version>${coroutines.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
         <!-- Utilities -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.razorpay</groupId>
+            <artifactId>razorpay-java</artifactId>
+            <version>1.4.4</version>
+        </dependency>
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

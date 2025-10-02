@@ -1,20 +1,13 @@
 package com.manawallpapers.service;
 
-import io.github.jan.supabase.SupabaseClient;
-import io.github.jan.supabase.storage.Storage;
-import io.github.jan.supabase.storage.StorageItem;
-import kotlinx.coroutines.future.FutureKt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static io.github.jan.supabase.client.SupabaseClientKt.createSupabaseClient;
-import static kotlin.time.Duration.Companion;
 
 @Service
 @Slf4j
@@ -32,52 +25,105 @@ public class StorageService {
     @Value("${app.presigned-url.expiration:3600}")
     private long presignedUrlExpiration;
 
-    private SupabaseClient supabaseClient;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    @PostConstruct
-    public void initialize() {
-        supabaseClient = createSupabaseClient(supabaseUrl, supabaseKey, builder -> {
-            builder.install(Storage.class);
-            return null;
-        });
+    private HttpHeaders buildHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(supabaseKey);
+        headers.set("apikey", supabaseKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 
+    /**
+     * Generate a presigned upload URL for a given file key
+     */
     public String generatePresignedUploadUrl(String key) {
         try {
-            return FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName)
-                    .createSignedUploadUrl(key, Companion.seconds(presignedUrlExpiration), false)).get();
-        } catch (InterruptedException | ExecutionException e) {
+            String url = supabaseUrl + "/storage/v1/object/sign/" + bucketName + "/" + key;
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("expiresIn", presignedUrlExpiration)
+                    .queryParam("upsert", false);
+
+            HttpEntity<String> entity = new HttpEntity<>(buildHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+
+            return response.getBody();
+        } catch (Exception e) {
             log.error("Error generating presigned upload URL for key: {}", key, e);
             throw new RuntimeException("Failed to generate upload URL", e);
         }
     }
 
+    /**
+     * Generate a presigned download URL for a given file key
+     */
     public String generatePresignedDownloadUrl(String key) {
         try {
-            return FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName)
-                    .createSignedUrl(key, Companion.seconds(presignedUrlExpiration))).get();
-        } catch (InterruptedException | ExecutionException e) {
+            String url = supabaseUrl + "/storage/v1/object/sign/" + bucketName + "/" + key;
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("expiresIn", presignedUrlExpiration);
+
+            HttpEntity<String> entity = new HttpEntity<>(buildHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+
+            return response.getBody();
+        } catch (Exception e) {
             log.error("Error generating presigned download URL for key: {}", key, e);
             throw new RuntimeException("Failed to generate download URL", e);
         }
     }
 
+    /**
+     * Delete an object from storage
+     */
     public void deleteObject(String key) {
         try {
-            FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName).delete(Collections.singletonList(key))).get();
+            String url = supabaseUrl + "/storage/v1/object/" + bucketName + "/" + key;
+            HttpEntity<String> entity = new HttpEntity<>(buildHeaders());
+
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    entity,
+                    String.class
+            );
+
             log.info("Successfully deleted object: {}", key);
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             log.error("Error deleting object: {}", key, e);
             throw new RuntimeException("Failed to delete object", e);
         }
     }
 
+    /**
+     * Check if object exists
+     */
     public boolean objectExists(String key) {
         try {
-            List<StorageItem> files = FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName).list(key, 1, 0, null)).get();
-            return files != null && !files.isEmpty();
-        } catch (InterruptedException | ExecutionException e) {
-            log.error("Error checking if object exists: {}", key, e);
+            String url = supabaseUrl + "/storage/v1/object/" + bucketName + "/" + key;
+            HttpEntity<String> entity = new HttpEntity<>(buildHeaders());
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.HEAD,
+                    entity,
+                    String.class
+            );
+
+            return response.getStatusCode().is2xxSuccessful();
+        } catch (Exception e) {
+            log.warn("Object {} does not exist or error occurred", key, e);
             return false;
         }
     }

@@ -1,4 +1,3 @@
-
 package com.manawallpapers;
 
 import org.springframework.boot.SpringApplication;

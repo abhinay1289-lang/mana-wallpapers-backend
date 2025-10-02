@@ -84,9 +84,9 @@ public class WallpaperService {
         wallpaperRepository.delete(wallpaper);
     }
 
-    public String generateUploadUrl(String filename, String contentType) {
+    public String generateUploadUrl(String filename) {
         String key = "wallpapers/" + UUID.randomUUID() + "/" + filename;
-        return storageService.generatePresignedUploadUrl(key, contentType);
+        return storageService.generatePresignedUploadUrl(key);
     }
 
     private WallpaperDto convertToDto(Wallpaper wallpaper) {

@@ -81,7 +81,7 @@ public class WallpaperController {
             @RequestParam String filename,
             @RequestParam String contentType) {
 
-        String uploadUrl = wallpaperService.generateUploadUrl(filename, contentType);
+        String uploadUrl = wallpaperService.generateUploadUrl(filename);
         return ResponseEntity.ok(ApiResponse.success("Upload URL generated", uploadUrl));
     }
 }
