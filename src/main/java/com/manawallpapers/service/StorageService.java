@@ -1,14 +1,20 @@
 package com.manawallpapers.service;
 
-import io.supabase.client.SupabaseClient;
-import io.supabase.client.storage.StorageFile;
+import io.github.jan.supabase.SupabaseClient;
+import io.github.jan.supabase.storage.Storage;
+import io.github.jan.supabase.storage.StorageItem;
+import kotlinx.coroutines.future.FutureKt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
-import java.net.URL;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static io.github.jan.supabase.client.SupabaseClientKt.createSupabaseClient;
+import static kotlin.time.Duration.Companion;
 
 @Service
 @Slf4j
@@ -30,13 +36,17 @@ public class StorageService {
 
     @PostConstruct
     public void initialize() {
-        this.supabaseClient = new SupabaseClient(supabaseUrl, supabaseKey, null);
+        supabaseClient = createSupabaseClient(supabaseUrl, supabaseKey, builder -> {
+            builder.install(Storage.class);
+            return null;
+        });
     }
 
-    public String generatePresignedUploadUrl(String key, String contentType) {
+    public String generatePresignedUploadUrl(String key) {
         try {
-            return supabaseClient.getStorage().from(bucketName).createSignedUrl(key, presignedUrlExpiration);
-        } catch (Exception e) {
+            return FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName)
+                    .createSignedUploadUrl(key, Companion.seconds(presignedUrlExpiration), false)).get();
+        } catch (InterruptedException | ExecutionException e) {
             log.error("Error generating presigned upload URL for key: {}", key, e);
             throw new RuntimeException("Failed to generate upload URL", e);
         }
@@ -44,8 +54,9 @@ public class StorageService {
 
     public String generatePresignedDownloadUrl(String key) {
         try {
-            return supabaseClient.getStorage().from(bucketName).createSignedUrl(key, presignedUrlExpiration);
-        } catch (Exception e) {
+            return FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName)
+                    .createSignedUrl(key, Companion.seconds(presignedUrlExpiration))).get();
+        } catch (InterruptedException | ExecutionException e) {
             log.error("Error generating presigned download URL for key: {}", key, e);
             throw new RuntimeException("Failed to generate download URL", e);
         }
@@ -53,9 +64,9 @@ public class StorageService {
 
     public void deleteObject(String key) {
         try {
-            supabaseClient.getStorage().from(bucketName).remove(List.of(key));
+            FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName).delete(Collections.singletonList(key))).get();
             log.info("Successfully deleted object: {}", key);
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             log.error("Error deleting object: {}", key, e);
             throw new RuntimeException("Failed to delete object", e);
         }
@@ -63,9 +74,9 @@ public class StorageService {
 
     public boolean objectExists(String key) {
         try {
-            List<StorageFile> files = supabaseClient.getStorage().from(bucketName).list(key, null);
+            List<StorageItem> files = FutureKt.asCompletableFuture(supabaseClient.getStorage().from(bucketName).list(key, 1, 0, null)).get();
             return files != null && !files.isEmpty();
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             log.error("Error checking if object exists: {}", key, e);
             return false;
         }
