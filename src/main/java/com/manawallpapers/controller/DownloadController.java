@@ -14,10 +14,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/download")
-@RequiredArgsConstructor
 public class DownloadController {
 
-    private final DownloadService downloadService;
+    private DownloadService downloadService;
 
     @GetMapping("/{token}")
     public ResponseEntity<ApiResponse<String>> generateDownloadUrl(

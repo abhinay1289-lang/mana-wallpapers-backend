@@ -26,7 +26,7 @@ public class Wallpaper {
     private UUID id;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -61,15 +61,19 @@ public class Wallpaper {
     private String licenseText;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id", nullable = false)
+    private SubCategory subCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploader_id", nullable = false)
     private User uploader;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
     @ElementCollection
-    @CollectionTable(name = "wallpaper_tags", joinColumns = @JoinColumn(name = "wallpaper_id"))
+    @CollectionTable(name = "wallpaper_tags", joinColumns = @JoinColumn(name = "item_id"))
     @Column(name = "tag")
     private List<String> tags;
 

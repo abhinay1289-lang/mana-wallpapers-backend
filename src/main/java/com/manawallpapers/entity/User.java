@@ -40,9 +40,9 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Enumerated(EnumType.STRING)
+    @NotBlank
     @Column(nullable = false)
-    private Role role = Role.BUYER;
+    private String role;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

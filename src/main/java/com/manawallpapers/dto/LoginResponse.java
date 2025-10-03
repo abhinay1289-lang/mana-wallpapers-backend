@@ -14,5 +14,5 @@ public class LoginResponse {
     private UUID userId;
     private String email;
     private String fullName;
-    private User.Role role;
+    private String role;
 }

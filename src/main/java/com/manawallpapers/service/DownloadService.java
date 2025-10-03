@@ -9,6 +9,7 @@ import com.manawallpapers.repository.DownloadRepository;
 import com.manawallpapers.repository.WallpaperRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +17,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class DownloadService {
-
-    private final DownloadRepository downloadRepository;
-    private final StorageService storageService;
-    private final WallpaperRepository wallpaperRepository;
+    @Autowired
+    private DownloadRepository downloadRepository;
+    @Autowired
+    private StorageService storageService;
+    @Autowired
+    private WallpaperRepository wallpaperRepository;
 
     public void createDownloadTokens(Order order) {
         for (OrderItem item : order.getOrderItems()) {

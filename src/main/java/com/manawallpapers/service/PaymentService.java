@@ -13,6 +13,7 @@ import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class PaymentService {
-
-    private final OrderRepository orderRepository;
-    private final WallpaperRepository wallpaperRepository;
-    private final DownloadService downloadService;
-    private final EmailService emailService;
-    private final RazorpayClient razorpayClient;
+    @Autowired
+    private  OrderRepository orderRepository;
+    @Autowired
+    private  WallpaperRepository wallpaperRepository;
+    @Autowired
+    private  DownloadService downloadService;
+    @Autowired
+    private  EmailService emailService;
+    @Autowired
+    private  RazorpayClient razorpayClient;
 
     @Value("${razorpay.api.secret}")
     private String razorpaySecret;

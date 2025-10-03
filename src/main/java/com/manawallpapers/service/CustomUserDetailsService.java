@@ -4,6 +4,7 @@ import com.manawallpapers.entity.User;
 import com.manawallpapers.repository.UserRepository;
 import com.manawallpapers.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,10 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional

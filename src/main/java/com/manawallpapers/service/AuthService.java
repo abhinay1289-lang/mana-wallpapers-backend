@@ -7,7 +7,7 @@ import com.manawallpapers.entity.User;
 import com.manawallpapers.exception.BadRequestException;
 import com.manawallpapers.repository.UserRepository;
 import com.manawallpapers.security.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,14 +16,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class AuthService {
-
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider tokenProvider;
+    @Autowired
+    private  AuthenticationManager authenticationManager;
+    @Autowired
+    private  UserRepository userRepository;
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
+    @Autowired
+    private  JwtTokenProvider tokenProvider;
 
     public LoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager
@@ -56,8 +58,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFullName(request.getFullName());
-        user.setRole(User.Role.BUYER);
-
+        user.setRole(String.valueOf(User.Role.BUYER));
         userRepository.save(user);
     }
 }

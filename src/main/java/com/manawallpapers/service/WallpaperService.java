@@ -6,6 +6,7 @@ import com.manawallpapers.entity.Wallpaper;
 import com.manawallpapers.exception.ResourceNotFoundException;
 import com.manawallpapers.repository.WallpaperRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class WallpaperService {
-
-    private final WallpaperRepository wallpaperRepository;
-    private final StorageService storageService;
+    @Autowired
+    private WallpaperRepository wallpaperRepository;
+    @Autowired
+    private StorageService storageService;
 
     public Page<WallpaperDto> getAllWallpapers(Pageable pageable, String category, String query, Boolean free) {
         Page<Wallpaper> wallpapers;

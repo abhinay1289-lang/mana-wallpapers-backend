@@ -19,10 +19,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/wallpapers")
-@RequiredArgsConstructor
 public class WallpaperController {
 
-    private final WallpaperService wallpaperService;
+    private WallpaperService wallpaperService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<WallpaperDto>>> getAllWallpapers(
@@ -69,7 +68,7 @@ public class WallpaperController {
 
         User user = new User();
         user.setId(userDetails.getId());
-        user.setRole(User.Role.ADMIN);
+        user.setRole(String.valueOf(User.Role.ADMIN));
 
         wallpaperService.deleteWallpaper(id, user);
         return ResponseEntity.ok(ApiResponse.success("Wallpaper deleted successfully", null));
