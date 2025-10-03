@@ -31,29 +31,10 @@ public class PaymentService {
     private final WallpaperRepository wallpaperRepository;
     private final DownloadService downloadService;
     private final EmailService emailService;
-
     private final RazorpayClient razorpayClient;
-
-    @Value("${razorpay.api.key}")
-    private String razorpayKey;
 
     @Value("${razorpay.api.secret}")
     private String razorpaySecret;
-
-    public PaymentService(OrderRepository orderRepository,
-                          WallpaperRepository wallpaperRepository,
-                          DownloadService downloadService,
-                          EmailService emailService,
-                          @Value("${razorpay.api.key}") String razorpayKey,
-                          @Value("${razorpay.api.secret}") String razorpaySecret) throws RazorpayException {
-        this.orderRepository = orderRepository;
-        this.wallpaperRepository = wallpaperRepository;
-        this.downloadService = downloadService;
-        this.emailService = emailService;
-        this.razorpayKey = razorpayKey;
-        this.razorpaySecret = razorpaySecret;
-        this.razorpayClient = new RazorpayClient(razorpayKey, razorpaySecret);
-    }
 
     public CheckoutResponse createOrder(CheckoutRequest request, User buyer) {
         try {
