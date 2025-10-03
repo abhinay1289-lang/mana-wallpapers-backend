@@ -8,7 +8,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.1</version>
-        <relativePath/>
+        <relativePath /> <!-- optional -->
     </parent>
 
     <groupId>com.manawallpapers</groupId>
@@ -61,11 +61,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-            <version>10.7.1</version>
-        </dependency>
 
         <!-- JWT -->
         <dependency>
@@ -86,7 +81,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Supabase (Kotlin library) -->
+        <!-- Supabase Kotlin library -->
         <dependency>
             <groupId>io.github.jan-tennert.supabase</groupId>
             <artifactId>storage-kt</artifactId>
@@ -97,22 +92,27 @@
             <artifactId>kotlinx-coroutines-jdk8</artifactId>
             <version>${coroutines.version}</version>
         </dependency>
+
+        <!-- OpenAPI documentation -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
+
         <!-- Utilities -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>com.razorpay</groupId>
             <artifactId>razorpay-java</artifactId>
             <version>1.4.4</version>
         </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -128,17 +128,22 @@
 
     <build>
         <plugins>
+            <!-- Compiler plugin with encoding and Java version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

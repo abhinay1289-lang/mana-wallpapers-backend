@@ -22,7 +22,7 @@ CREATE TABLE wallpapers (
 CREATE TABLE wallpaper_tags (
     wallpaper_id UUID NOT NULL REFERENCES wallpapers(id) ON DELETE CASCADE,
     tag VARCHAR(50) NOT NULL,
-       PRIMARY KEY (item_id, tag)
+       PRIMARY KEY (wallpaper_id, tag)
 );
 
 CREATE INDEX idx_wallpapers_title ON wallpapers(title);
