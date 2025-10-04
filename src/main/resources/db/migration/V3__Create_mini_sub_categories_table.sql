@@ -1,3 +1,4 @@
+-- V3__Create_mini_sub_categories_table.sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE mini_sub_categories (

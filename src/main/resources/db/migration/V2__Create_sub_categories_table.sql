@@ -1,3 +1,4 @@
+-- V2__Create_categories_table.sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE sub_categories (

@@ -1,3 +1,4 @@
+-- V4__Create_users_table.sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TYPE user_role AS ENUM ('ADMIN', 'BUYER');
