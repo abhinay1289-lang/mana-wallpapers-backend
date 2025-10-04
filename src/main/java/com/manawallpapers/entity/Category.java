@@ -22,12 +22,4 @@ public class Category {
     @NotBlank
     @Column(nullable = false)
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-
-    @NotBlank
-    @Column(nullable = false, unique = true)
-    private String slug;
 }
