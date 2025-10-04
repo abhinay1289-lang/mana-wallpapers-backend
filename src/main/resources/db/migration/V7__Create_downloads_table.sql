@@ -1,4 +1,4 @@
--- V6__Create_downloads_table.sql
+-- V7__Create_downloads_table.sql
 CREATE TABLE downloads (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     wallpaper_id UUID NOT NULL REFERENCES wallpapers(id) ON DELETE CASCADE,

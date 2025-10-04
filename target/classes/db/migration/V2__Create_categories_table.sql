@@ -1,4 +1,4 @@
--- V2__Create_downloads_table.sql
+-- V2__Create_categories_table.sql
 CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL
