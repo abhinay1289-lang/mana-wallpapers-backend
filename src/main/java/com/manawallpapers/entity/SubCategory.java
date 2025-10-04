@@ -24,14 +24,8 @@ public class SubCategory {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 100)
-    private String icon;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Wallpaper> wallpapers;
 }
 

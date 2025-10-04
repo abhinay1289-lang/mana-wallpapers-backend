@@ -8,7 +8,7 @@ CREATE TABLE mini_sub_categories (
 
 ALTER TABLE mini_sub_categories
 ADD CONSTRAINT mini_sub_categories_sub_category_id_fkey
-FOREIGN KEY sub_category_id REFERENCES sub_categories(id);
+FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id);
 
 CREATE INDEX idx_mini_sub_categories_sub_category_id
   ON mini_sub_categories(sub_category_id);

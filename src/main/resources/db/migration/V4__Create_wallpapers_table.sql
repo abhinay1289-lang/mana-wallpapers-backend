@@ -15,6 +15,7 @@ CREATE TABLE wallpapers (
         uploader_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
         sub_category_id UUID NOT NULL REFERENCES sub_categories(id) ON DELETE RESTRICT,
+        mini_sub_category_id UUID NOT NULL REFERENCES mini_sub_categories(id) ON DELETE RESTRICT,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,6 +29,7 @@ CREATE TABLE wallpaper_tags (
 CREATE INDEX idx_wallpapers_title ON wallpapers(title);
 CREATE INDEX idx_wallpapers_category_id ON wallpapers(category_id);
 CREATE INDEX idx_wallpapers_sub_category_id ON wallpapers(sub_category_id);
+CREATE INDEX idx_wallpapers_mini_sub_category_id ON wallpapers(mini_sub_category_id);
 CREATE INDEX idx_wallpapers_uploader_id ON wallpapers(uploader_id);
 CREATE INDEX idx_wallpapers_is_free ON wallpapers(is_free);
 CREATE INDEX idx_wallpapers_is_downloadable ON wallpapers(is_downloadable);
