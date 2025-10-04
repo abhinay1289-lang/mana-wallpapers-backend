@@ -69,7 +69,7 @@ public class Wallpaper {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "mini_category_id", nullable = false)
     private MiniSubCategory miniSubCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)

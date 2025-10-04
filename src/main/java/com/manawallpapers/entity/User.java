@@ -40,7 +40,6 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @NotBlank
     @Column(nullable = false)
     private String role;
 

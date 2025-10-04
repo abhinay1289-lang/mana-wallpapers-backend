@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "min_sub_categories")
+@Table(name = "mini_sub_categories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
