@@ -1,7 +1,7 @@
 package com.manawallpapers.entity;
 
 import jakarta.persistence.*;
-        import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,11 +25,8 @@ public class MiniSubCategory {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "sub_category_id", nullable = false)
     private SubCategory subCategory;
-
-    @OneToMany(mappedBy = "miniSubCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Wallpaper> wallpapers;
 }
 
 

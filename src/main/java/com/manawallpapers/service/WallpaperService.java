@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,22 +23,24 @@ public class WallpaperService {
     @Autowired
     private StorageService storageService;
 
-    public Page<WallpaperDto> getAllWallpapers(Pageable pageable, String category, String query, Boolean free) {
-        Page<Wallpaper> wallpapers;
-
-        if (category != null && query != null) {
-            wallpapers = wallpaperRepository.findByCategorySlugAndTitleContainingIgnoreCase(category, query, pageable);
-        } else if (category != null) {
-            wallpapers = wallpaperRepository.findByCategorySlug(category, pageable);
-        } else if (query != null) {
-            wallpapers = wallpaperRepository.findByTitleContainingIgnoreCase(query, pageable);
-        } else if (free != null) {
-            wallpapers = wallpaperRepository.findByIsFree(free, pageable);
-        } else {
-            wallpapers = wallpaperRepository.findByIsDownloadableTrue(pageable);
+    public List<WallpaperDto> getAllWallpapers(Pageable pageable, String category, Boolean free) {
+        List<Wallpaper> wallpapers;
+        wallpapers = wallpaperRepository.findAllByOrderByTitleAsc();
+        if (category == null) {
+            wallpapers = wallpaperRepository.findAllByOrderByTitleAsc();
         }
+//        else if (category != null) {
+//            wallpapers = wallpaperRepository.findByCategorySlug(category, pageable);
+//        } else if (query != null) {
+//            wallpapers = wallpaperRepository.findByTitleContainingIgnoreCase(query, pageable);
+//        } else if (free != null) {
+//            wallpapers = wallpaperRepository.findByIsFree(free, pageable);
+//        } else {
+//            wallpapers = wallpaperRepository.findByIsDownloadableTrue(pageable);
+//        }
 
-        return wallpapers.map(this::convertToDto);
+
+        return null;
     }
 
     public WallpaperDto getWallpaperById(UUID id) {
@@ -52,7 +55,6 @@ public class WallpaperService {
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
         wallpaper.setFileKey(dto.getFileKey());
-        wallpaper.setThumbnailKey(dto.getThumbnailKey());
         wallpaper.setPriceCents(dto.getPriceCents());
         wallpaper.setCurrency(dto.getCurrency());
         wallpaper.setIsFree(dto.getIsFree());
@@ -67,28 +69,26 @@ public class WallpaperService {
         return convertToDto(wallpaper);
     }
 
-    public void deleteWallpaper(UUID id, User user) {
-        Wallpaper wallpaper = wallpaperRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Wallpaper not found with id: " + id));
+//    public void deleteWallpaper(UUID id, User user) {
+//        Wallpaper wallpaper = wallpaperRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Wallpaper not found with id: " + id));
+//
+//        // Check if user is admin or the uploader
+//        if (!user.getRole().equals(User.Role.ADMIN) && !wallpaper.getUploader().getId().equals(user.getId())) {
+//            throw new SecurityException("Not authorized to delete this wallpaper");
+//        }
+//
+//        // Delete from Storage
+//        storageService.deleteObject(wallpaper.getFileKey());
+//
+//
+//        wallpaperRepository.delete(wallpaper);
+//    }
 
-        // Check if user is admin or the uploader
-        if (!user.getRole().equals(User.Role.ADMIN) && !wallpaper.getUploader().getId().equals(user.getId())) {
-            throw new SecurityException("Not authorized to delete this wallpaper");
-        }
-
-        // Delete from Storage
-        storageService.deleteObject(wallpaper.getFileKey());
-        if (wallpaper.getThumbnailKey() != null) {
-            storageService.deleteObject(wallpaper.getThumbnailKey());
-        }
-
-        wallpaperRepository.delete(wallpaper);
-    }
-
-    public String generateUploadUrl(String filename) {
-        String key = "wallpapers/" + UUID.randomUUID() + "/" + filename;
-        return storageService.generatePresignedUploadUrl(key);
-    }
+//    public String generateUploadUrl(String filename) {
+//        String key = "wallpapers/" + UUID.randomUUID() + "/" + filename;
+//        return storageService.generatePresignedUploadUrl(key);
+//    }
 
     private WallpaperDto convertToDto(Wallpaper wallpaper) {
         WallpaperDto dto = new WallpaperDto();
@@ -96,7 +96,6 @@ public class WallpaperService {
         dto.setTitle(wallpaper.getTitle());
         dto.setDescription(wallpaper.getDescription());
         dto.setFileKey(wallpaper.getFileKey());
-        dto.setThumbnailKey(wallpaper.getThumbnailKey());
         dto.setPriceCents(wallpaper.getPriceCents());
         dto.setCurrency(wallpaper.getCurrency());
         dto.setIsFree(wallpaper.getIsFree());
@@ -107,9 +106,9 @@ public class WallpaperService {
         dto.setCreatedAt(wallpaper.getCreatedAt());
         dto.setUpdatedAt(wallpaper.getUpdatedAt());
 
-        if (wallpaper.getThumbnailKey() != null) {
-            dto.setThumbnailUrl(storageService.generatePresignedDownloadUrl(wallpaper.getThumbnailKey()));
-        }
+//        if (wallpaper.getThumbnailKey() != null) {
+//            dto.setThumbnailUrl(storageService.generatePresignedDownloadUrl(wallpaper.getThumbnailKey()));
+//        }
 
         return dto;
     }

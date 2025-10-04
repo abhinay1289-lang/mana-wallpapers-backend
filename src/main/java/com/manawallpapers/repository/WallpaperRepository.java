@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface WallpaperRepository extends JpaRepository<Wallpaper, UUID> {
+
+    List<Wallpaper> findAllByOrderByTitleAsc();
 
     Page<Wallpaper> findByIsDownloadableTrue(Pageable pageable);
 
@@ -19,12 +22,4 @@ public interface WallpaperRepository extends JpaRepository<Wallpaper, UUID> {
 
     Page<Wallpaper> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-    @Query("SELECT w FROM Wallpaper w WHERE w.category.slug = :categorySlug AND w.isDownloadable = true")
-    Page<Wallpaper> findByCategorySlug(@Param("categorySlug") String categorySlug, Pageable pageable);
-
-    @Query("SELECT w FROM Wallpaper w WHERE w.category.slug = :categorySlug AND UPPER(w.title) LIKE UPPER(CONCAT('%', :title, '%')) AND w.isDownloadable = true")
-    Page<Wallpaper> findByCategorySlugAndTitleContainingIgnoreCase(
-            @Param("categorySlug") String categorySlug,
-            @Param("title") String title,
-            Pageable pageable);
 }

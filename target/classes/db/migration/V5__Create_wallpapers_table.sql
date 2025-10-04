@@ -5,7 +5,6 @@ CREATE TABLE wallpapers (
         title VARCHAR(255) NOT NULL,
         description TEXT,
         file_key VARCHAR(500) NOT NULL,
-        thumbnail_key VARCHAR(500),
         price_cents INTEGER,
         currency VARCHAR(3) NOT NULL DEFAULT 'USD',
         is_free BOOLEAN NOT NULL DEFAULT FALSE,

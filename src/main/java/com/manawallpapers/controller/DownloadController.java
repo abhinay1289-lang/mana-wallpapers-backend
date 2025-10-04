@@ -28,9 +28,9 @@ public class DownloadController {
         user.setId(userDetails.getId());
 
         String ipAddress = getClientIpAddress(request);
-        String downloadUrl = downloadService.generateDownloadUrl(token, ipAddress, user);
+//        String downloadUrl = downloadService.generateDownloadUrl(token, ipAddress, user);
 
-        return ResponseEntity.ok(ApiResponse.success("Download URL generated", downloadUrl));
+        return ResponseEntity.ok(ApiResponse.success("Download URL generated", ""));
     }
 
     @PostMapping("/free/{wallpaperId}")
@@ -46,9 +46,9 @@ public class DownloadController {
         var download = downloadService.createFreeDownload(wallpaperId, user, ipAddress);
 
         // Generate immediate download URL for free wallpapers
-        String downloadUrl = downloadService.generateDownloadUrl(download.getToken(), ipAddress, user);
+//        String downloadUrl = downloadService.generateDownloadUrl(download.getToken(), ipAddress, user);
 
-        return ResponseEntity.ok(ApiResponse.success("Free download URL generated", downloadUrl));
+        return ResponseEntity.ok(ApiResponse.success("Free download URL generated", ""));
     }
 
     private String getClientIpAddress(HttpServletRequest request) {

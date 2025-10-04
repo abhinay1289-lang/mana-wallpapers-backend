@@ -6,6 +6,7 @@ import com.manawallpapers.entity.User;
 import com.manawallpapers.security.CustomUserDetails;
 import com.manawallpapers.service.WallpaperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,29 +16,29 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/wallpapers")
 public class WallpaperController {
-
+    @Autowired
     private WallpaperService wallpaperService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<WallpaperDto>>> getAllWallpapers(
+    public ResponseEntity<ApiResponse<List<WallpaperDto>>> getAllWallpapers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String q,
             @RequestParam(required = false) Boolean free) {
 
         Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ?
                 Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<WallpaperDto> wallpapers = wallpaperService.getAllWallpapers(pageable, category, q, free);
+        List<WallpaperDto> wallpapers = wallpaperService.getAllWallpapers(pageable, category, free);
         return ResponseEntity.ok(ApiResponse.success(wallpapers));
     }
 
@@ -70,7 +71,7 @@ public class WallpaperController {
         user.setId(userDetails.getId());
         user.setRole(String.valueOf(User.Role.ADMIN));
 
-        wallpaperService.deleteWallpaper(id, user);
+//        wallpaperService.deleteWallpaper(id, user);
         return ResponseEntity.ok(ApiResponse.success("Wallpaper deleted successfully", null));
     }
 
@@ -80,7 +81,7 @@ public class WallpaperController {
             @RequestParam String filename,
             @RequestParam String contentType) {
 
-        String uploadUrl = wallpaperService.generateUploadUrl(filename);
-        return ResponseEntity.ok(ApiResponse.success("Upload URL generated", uploadUrl));
+//        String uploadUrl = wallpaperService.generateUploadUrl(filename);
+        return ResponseEntity.ok(ApiResponse.success("Upload URL generated", ""));
     }
 }

@@ -43,27 +43,27 @@ public class DownloadService {
         }
     }
 
-    public String generateDownloadUrl(String token, String ipAddress, User user) {
-        Download download = downloadRepository.findByToken(token)
-                .orElseThrow(() -> new ResourceNotFoundException("Download token not found"));
-
-        // Validate token
-        if (download.isExpired()) {
-            throw new IllegalStateException("Download token has expired");
-        }
-
-        if (!download.getBuyer().getId().equals(user.getId())) {
-            throw new SecurityException("Not authorized to download this file");
-        }
-
-        // Update download record
-        download.setIpAddress(ipAddress);
-        download.setDownloadCount(download.getDownloadCount() + 1);
-        downloadRepository.save(download);
-
-        // Generate presigned URL
-        return storageService.generatePresignedDownloadUrl(download.getWallpaper().getFileKey());
-    }
+//    public String generateDownloadUrl(String token, String ipAddress, User user) {
+//        Download download = downloadRepository.findByToken(token)
+//                .orElseThrow(() -> new ResourceNotFoundException("Download token not found"));
+//
+//        // Validate token
+//        if (download.isExpired()) {
+//            throw new IllegalStateException("Download token has expired");
+//        }
+//
+//        if (!download.getBuyer().getId().equals(user.getId())) {
+//            throw new SecurityException("Not authorized to download this file");
+//        }
+//
+//        // Update download record
+//        download.setIpAddress(ipAddress);
+//        download.setDownloadCount(download.getDownloadCount() + 1);
+//        downloadRepository.save(download);
+//
+//        // Generate presigned URL
+//        return storageService.generatePresignedDownloadUrl(download.getWallpaper().getFileKey());
+//    }
 
     public Download createFreeDownload(UUID wallpaperId, User user, String ipAddress) {
         // For free wallpapers, create temporary download
