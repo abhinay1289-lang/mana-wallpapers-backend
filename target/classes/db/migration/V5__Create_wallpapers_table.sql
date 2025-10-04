@@ -1,3 +1,4 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- V5__Create_wallpapers_table.sql
 CREATE TABLE wallpapers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
