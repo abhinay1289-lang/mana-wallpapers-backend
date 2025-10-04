@@ -1,4 +1,4 @@
--- V5__Create_orders_table.sql
+-- V6__Create_orders_table.sql
 CREATE TYPE order_status AS ENUM ('PENDING', 'PAID', 'FAILED', 'REFUNDED');
 
 CREATE TABLE orders (

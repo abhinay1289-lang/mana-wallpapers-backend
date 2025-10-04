@@ -1,4 +1,4 @@
--- V6__Create_order_items_table.sql
+-- V7__Create_order_items_table.sql
 CREATE TABLE order_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
