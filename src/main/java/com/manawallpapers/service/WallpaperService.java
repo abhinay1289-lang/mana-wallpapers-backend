@@ -52,6 +52,7 @@ public class WallpaperService {
 
     public WallpaperDto createWallpaper(WallpaperDto dto, User uploader) {
         Wallpaper wallpaper = new Wallpaper();
+//        storageService.uploadFile()
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
         wallpaper.setFileKey(dto.getFileKey());
