@@ -21,6 +21,7 @@ com/manawallpapers/service/StorageService.class
 com/manawallpapers/entity/User$Role.class
 com/manawallpapers/dto/WallpaperDto.class
 com/manawallpapers/service/AuthService.class
+com/manawallpapers/dto/SubCategoryDto.class
 com/manawallpapers/dto/ApiResponse.class
 com/manawallpapers/entity/Download.class
 com/manawallpapers/service/CustomUserDetailsService.class
@@ -45,3 +46,4 @@ com/manawallpapers/entity/Order$OrderStatus.class
 com/manawallpapers/controller/DownloadController.class
 com/manawallpapers/repository/WallpaperRepository.class
 com/manawallpapers/repository/UserRepository.class
+com/manawallpapers/dto/CategoryDto.class

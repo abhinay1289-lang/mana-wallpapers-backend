@@ -1,6 +1,7 @@
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/exception/GlobalExceptionHandler.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/service/PaymentService.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/controller/DownloadController.java
+/home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/dto/SubCategoryDto.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/dto/LoginResponse.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/service/DownloadService.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/security/JwtAuthenticationEntryPoint.java
@@ -9,6 +10,7 @@
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/entity/User.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/dto/WallpaperDto.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/controller/PaymentController.java
+/home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/dto/CategoryDto.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/security/CustomUserDetails.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/config/RazorpayConfig.java
 /home/user/mana-wallpapers-backend/src/main/java/com/manawallpapers/dto/RegisterRequest.java
