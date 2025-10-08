@@ -1,20 +1,25 @@
 package com.manawallpapers.controller;
 
-import com.manawallpapers.dto.ApiResponse;
-import com.manawallpapers.dto.WallpaperDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.manawallpapers.dto.*;
+import com.manawallpapers.entity.MiniSubCategory;
 import com.manawallpapers.entity.User;
 import com.manawallpapers.security.CustomUserDetails;
 import com.manawallpapers.service.WallpaperService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +29,9 @@ import java.util.UUID;
 public class WallpaperController {
     @Autowired
     private WallpaperService wallpaperService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<WallpaperDto>>> getAllWallpapers(
@@ -48,16 +56,24 @@ public class WallpaperController {
         return ResponseEntity.ok(ApiResponse.success(wallpaper));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all-category")
+    public ResponseEntity<ApiResponse<List<AllCategoriesListResponse>>> getAllCategoriesAndSubCategories() {
+        List<AllCategoriesListResponse> wallpaper = wallpaperService.getAllCategoriesAndSubCategories();
+        return ResponseEntity.ok(ApiResponse.success(wallpaper));
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<WallpaperDto>> createWallpaper(
-            @RequestBody WallpaperDto wallpaperDto,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        User uploader = new User();
-        uploader.setId(userDetails.getId());
-
-        WallpaperDto created = wallpaperService.createWallpaper(wallpaperDto, uploader);
+            @RequestPart("wallpaperDto")
+            String wallpaperDtoJson,
+            @RequestPart("file") MultipartFile file)  {
+        WallpaperDto wallpaperDto;
+        try {
+             wallpaperDto = objectMapper.readValue(wallpaperDtoJson, WallpaperDto.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JSON for WallpaperDto", e);
+        }
+        WallpaperDto created = wallpaperService.createWallpaper(wallpaperDto,file);
         return ResponseEntity.ok(ApiResponse.success("Wallpaper created successfully", created));
     }
 

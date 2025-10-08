@@ -16,17 +16,15 @@ public class WallpaperDto {
     private UUID id;
     private String title;
     private String description;
-    private String fileKey;
-    private String thumbnailKey;
-    private String thumbnailUrl;
     private Integer priceCents;
     private String currency;
     private Boolean isFree;
     private String resolution;
     private String format;
-    private String licenseText;
-    private List<String> tags;
-
+    private UUID uploadedBy;
+    private UUID category;
+    private UUID subCategory;
+    private UUID miniSubCategory;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
