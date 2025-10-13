@@ -126,9 +126,9 @@ public class WallpaperService {
         Category category = categoryRepository.findById(dto.getCategory()).get();
         SubCategory subCategory = subCategoryRepository.findById(dto.getSubCategory()).get();
         MiniSubCategory miniSubCategory = miniSubCategoryRepository.findById(dto.getMiniSubCategory()).get();
-        String path = category.getName() + subCategory.getName() + miniSubCategory.getName();
+        String path = category.getName() +"/"+ subCategory.getName() +"/"+ miniSubCategory.getName();
         System.out.println(path);
-        String fileKey = storageService.uploadFile(imageFile,path);
+        String fileKey = storageService.uploadFile(imageFile,"/Other-Popular-Categories/Nature/Forests");
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
         wallpaper.setFileKey(fileKey);

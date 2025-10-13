@@ -57,16 +57,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/wallpapers/**").authenticated()
+                        .requestMatchers("/wallpapers/all-category").permitAll()
+
+
                         .requestMatchers("/categories/**").permitAll()
                         .requestMatchers("/download/public/**").permitAll()
                         .requestMatchers("/webhook/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
                                 "/swagger-ui/**"
                         ).permitAll()
                         // Authenticated endpoints
+                        .requestMatchers("/wallpapers/**").authenticated()
                         .requestMatchers("/cart/**").authenticated()
                         .requestMatchers("/checkout/**").authenticated()
                         .requestMatchers("/orders/**").authenticated()
