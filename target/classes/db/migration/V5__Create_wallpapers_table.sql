@@ -11,19 +11,12 @@ CREATE TABLE wallpapers (
         is_downloadable BOOLEAN NOT NULL DEFAULT TRUE,
         resolution VARCHAR(50) NOT NULL,
         format VARCHAR(10) NOT NULL,
-        license_text TEXT,
         uploader_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
         sub_category_id UUID NOT NULL REFERENCES sub_categories(id) ON DELETE RESTRICT,
         mini_sub_category_id UUID NOT NULL REFERENCES mini_sub_categories(id) ON DELETE RESTRICT,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE wallpaper_tags (
-    wallpaper_id UUID NOT NULL REFERENCES wallpapers(id) ON DELETE CASCADE,
-    tag VARCHAR(50) NOT NULL,
-       PRIMARY KEY (wallpaper_id, tag)
 );
 
 CREATE INDEX idx_wallpapers_title ON wallpapers(title);

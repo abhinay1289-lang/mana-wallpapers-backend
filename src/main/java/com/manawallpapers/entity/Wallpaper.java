@@ -54,9 +54,6 @@ public class Wallpaper {
     @Column(nullable = false)
     private String format;
 
-    @Column(name = "license_text", columnDefinition = "TEXT")
-    private String licenseText;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_category_id", nullable = false)
     private SubCategory subCategory;
@@ -72,11 +69,6 @@ public class Wallpaper {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploader_id", nullable = false)
     private User uploader;
-
-    @ElementCollection
-    @CollectionTable(name = "wallpaper_tags", joinColumns = @JoinColumn(name = "item_id"))
-    @Column(name = "tag")
-    private List<String> tags;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

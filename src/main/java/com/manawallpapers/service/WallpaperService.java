@@ -3,10 +3,7 @@ package com.manawallpapers.service;
 import com.manawallpapers.dto.*;
 import com.manawallpapers.entity.*;
 import com.manawallpapers.exception.ResourceNotFoundException;
-import com.manawallpapers.repository.CategoryRepository;
-import com.manawallpapers.repository.MiniSubCategoryRepository;
-import com.manawallpapers.repository.SubCategoryRepository;
-import com.manawallpapers.repository.WallpaperRepository;
+import com.manawallpapers.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +28,8 @@ public class WallpaperService {
     private SubCategoryRepository subCategoryRepository;
     @Autowired
     private MiniSubCategoryRepository miniSubCategoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<WallpaperDto> getAllWallpapers(Pageable pageable, String category, Boolean free) {
         List<Wallpaper> wallpapers;
@@ -126,9 +125,10 @@ public class WallpaperService {
         Category category = categoryRepository.findById(dto.getCategory()).get();
         SubCategory subCategory = subCategoryRepository.findById(dto.getSubCategory()).get();
         MiniSubCategory miniSubCategory = miniSubCategoryRepository.findById(dto.getMiniSubCategory()).get();
-        String path = category.getName() +"/"+ subCategory.getName() +"/"+ miniSubCategory.getName();
+        Optional<User> user  = userRepository.findById(dto.getUploadedBy());
+        String path = category.getName().replace(" ", "-") +"/"+ subCategory.getName() +"/"+ miniSubCategory.getName();
         System.out.println(path);
-        String fileKey = storageService.uploadFile(imageFile,"/Other-Popular-Categories/Nature/Forests");
+        String fileKey = storageService.uploadFile(imageFile,path);
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
         wallpaper.setFileKey(fileKey);
@@ -141,7 +141,11 @@ public class WallpaperService {
         wallpaper.setCategory(category);
         wallpaper.setSubCategory(subCategory);
         wallpaper.setMiniSubCategory(miniSubCategory);
-//        wallpaper.setUploader(uploader);
+        if(user.isPresent()){
+            wallpaper.setUploader(user.get());
+        }
+        wallpaper.setCreatedAt(dto.getCreatedAt());
+        wallpaper.setUpdatedAt(dto.getUpdatedAt());
 //        wallpaper.setTags(dto.getTags());
         wallpaper = wallpaperRepository.save(wallpaper);
         return convertToDto(wallpaper);
