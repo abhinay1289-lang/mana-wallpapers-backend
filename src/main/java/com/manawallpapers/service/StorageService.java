@@ -2,7 +2,11 @@ package com.manawallpapers.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -52,27 +56,42 @@ public class StorageService {
             String uniqueName = UUID.randomUUID() + "-" + file.getOriginalFilename();
             String objectKey = folderPath + "/" + uniqueName;
 
-            S3Client s3 = buildS3Client();
+            // Supabase upload endpoint
+            String uploadUrl = String.format("%s/storage/v1/object/%s/%s",
+                    supabaseS3Url.replace(".storage", ""),
+                    bucketName,
+                    objectKey);
 
-            try (InputStream inputStream = file.getInputStream()) {
-                PutObjectRequest putRequest = PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(objectKey)
-                        .contentType(file.getContentType())
-                        .build();
+            RestTemplate restTemplate = new RestTemplate();
 
-                s3.putObject(putRequest, software.amazon.awssdk.core.sync.RequestBody.fromInputStream(inputStream, file.getSize()));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            headers.set("Authorization", "Bearer " + supabaseKey);
+            headers.set("apikey", supabaseKey);
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", file.getResource());
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    uploadUrl, HttpMethod.POST, requestEntity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String publicUrl = String.format(
+                        "%s/storage/v1/object/public/%s/%s",
+                        supabaseS3Url.replace(".storage", ""),
+                        bucketName,
+                        objectKey
+                );
+                log.info("File uploaded successfully: {}", publicUrl);
+                return publicUrl;
+            } else {
+                throw new RuntimeException("Failed to upload: " + response.getStatusCode());
             }
 
-            // Construct a public-style URL (if your bucket is public)
-            String publicUrl = supabaseS3Url.replace("/s3", "") +
-                    "/object/public/" + bucketName + "/" + objectKey;
-
-            log.info("File uploaded successfully: {}", publicUrl);
-            return publicUrl;
-
         } catch (Exception e) {
-            log.error("Error uploading file to Supabase S3", e);
+            log.error("Error uploading file to Supabase", e);
             throw new RuntimeException("File upload failed", e);
         }
     }

@@ -127,7 +127,6 @@ public class WallpaperService {
         MiniSubCategory miniSubCategory = miniSubCategoryRepository.findById(dto.getMiniSubCategory()).get();
         Optional<User> user  = userRepository.findById(dto.getUploadedBy());
         String path = category.getName().replace(" ", "-") +"/"+ subCategory.getName() +"/"+ miniSubCategory.getName();
-        System.out.println(path);
         String fileKey = storageService.uploadFile(imageFile,path);
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
@@ -146,7 +145,6 @@ public class WallpaperService {
         }
         wallpaper.setCreatedAt(dto.getCreatedAt());
         wallpaper.setUpdatedAt(dto.getUpdatedAt());
-//        wallpaper.setTags(dto.getTags());
         wallpaper = wallpaperRepository.save(wallpaper);
         return convertToDto(wallpaper);
     }
