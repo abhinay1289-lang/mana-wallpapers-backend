@@ -31,22 +31,21 @@ public class WallpaperService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<WallpaperDto> getAllWallpapers(Pageable pageable, String category, Boolean free) {
-        List<Wallpaper> wallpapers;
-        wallpapers = wallpaperRepository.findAllByOrderByTitleAsc();
-        if (category == null) {
-            wallpapers = wallpaperRepository.findAllByOrderByTitleAsc();
-        }
-//        else if (category != null) {
-//            wallpapers = wallpaperRepository.findByCategorySlug(category, pageable);
-//        } else if (query != null) {
-//            wallpapers = wallpaperRepository.findByTitleContainingIgnoreCase(query, pageable);
-//        } else if (free != null) {
-//            wallpapers = wallpaperRepository.findByIsFree(free, pageable);
-//        } else {
-//            wallpapers = wallpaperRepository.findByIsDownloadableTrue(pageable);
-//        }
-
+    public List<WallpaperResponse> getAllWallpapers(Pageable pageable, UUID typeId, Boolean free) {
+        List<Wallpaper> wallpapers = wallpaperRepository.findByTypeId(typeId);
+        List<WallpaperResponse> response;
+        wallpapers.forEach(wallpaper -> {
+            WallpaperResponse wallpaperResponse = new WallpaperResponse();
+            wallpaperResponse.setId(wallpaper.getId());
+            wallpaperResponse.setTitle(wallpaper.getTitle());
+            wallpaperResponse.setPriceCents(wallpaper.getPriceCents());
+            wallpaperResponse.setIsFree(wallpaper.getIsFree());
+            wallpaperResponse.setResolution(wallpaper.getResolution());
+            wallpaperResponse.setFormat(wallpaper.getFormat());
+//            LookupDto lookupDto = new LookupDto();
+//            wallpaperResponse.setCategory(wallpaper.getTitle());
+            wallpaperResponse.setTitle(wallpaper.getTitle());
+        });
 
         return null;
     }
