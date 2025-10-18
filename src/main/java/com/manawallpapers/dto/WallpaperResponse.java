@@ -18,6 +18,7 @@ public class WallpaperResponse {
     private Boolean isFree;
     private String resolution;
     private String format;
+    private String fileKey;
     private LookupDto category;
     private LookupDto subCategory;
     private LookupDto miniSubCategory;

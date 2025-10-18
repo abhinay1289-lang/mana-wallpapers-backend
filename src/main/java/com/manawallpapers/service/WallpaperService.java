@@ -42,6 +42,7 @@ public class WallpaperService {
             wallpaperResponse.setIsFree(wallpaper.getIsFree());
             wallpaperResponse.setResolution(wallpaper.getResolution());
             wallpaperResponse.setFormat(wallpaper.getFormat());
+            wallpaperResponse.setFileKey(wallpaper.getFileKey());
             wallpaperResponse.setCategory(new LookupDto(wallpaper.getCategory().getId(), wallpaper.getCategory().getName()));
             wallpaperResponse.setSubCategory(new LookupDto(wallpaper.getSubCategory().getId(), wallpaper.getSubCategory().getName()));
             wallpaperResponse.setMiniSubCategory(new LookupDto(wallpaper.getMiniSubCategory().getId(), wallpaper.getMiniSubCategory().getName()));

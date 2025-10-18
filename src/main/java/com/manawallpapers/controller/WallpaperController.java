@@ -40,7 +40,7 @@ public class WallpaperController {
         List<WallpaperResponse> wallpapers = wallpaperService.getAllWallpapers(typeId);
         return ResponseEntity.ok(ApiResponse.success(wallpapers));
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<WallpaperDto>> getWallpaperById(@PathVariable UUID id) {
         WallpaperDto wallpaper = wallpaperService.getWallpaperById(id);
