@@ -33,7 +33,7 @@ public class WallpaperService {
 
     public List<WallpaperResponse> getAllWallpapers(UUID typeId) {
         List<Wallpaper> wallpapers = wallpaperRepository.findByTypeId(typeId);
-        List<WallpaperResponse> response;
+        List<WallpaperResponse> response = new ArrayList();
         wallpapers.forEach(wallpaper -> {
             WallpaperResponse wallpaperResponse = new WallpaperResponse();
             wallpaperResponse.setId(wallpaper.getId());
@@ -47,7 +47,7 @@ public class WallpaperService {
             wallpaperResponse.setMiniSubCategory(new LookupDto(wallpaper.getMiniSubCategory().getId(), wallpaper.getMiniSubCategory().getName()));
             wallpaperResponse.setCreatedAt(wallpaper.getCreatedAt());
             wallpaperResponse.setUpdatedAt(wallpaper.getUpdatedAt());
-            response.add(wallpaperResponse)
+            response.add(wallpaperResponse);
         });
 
         return response;

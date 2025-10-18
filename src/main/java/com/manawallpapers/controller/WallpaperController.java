@@ -35,7 +35,7 @@ public class WallpaperController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<WallpaperResponse>>> getAllWallpapers(
-            @RequestParam(required = false) UUID typeId,
+            @RequestParam(required = false) UUID typeId
             ) {
         List<WallpaperResponse> wallpapers = wallpaperService.getAllWallpapers(typeId);
         return ResponseEntity.ok(ApiResponse.success(wallpapers));
