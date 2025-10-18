@@ -35,18 +35,9 @@ public class WallpaperController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<WallpaperResponse>>> getAllWallpapers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir,
             @RequestParam(required = false) UUID typeId,
-            @RequestParam(required = false) Boolean isFree) {
-
-        Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ?
-                Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        List<WallpaperResponse> wallpapers = wallpaperService.getAllWallpapers(pageable, typeId, isFree);
+            ) {
+        List<WallpaperResponse> wallpapers = wallpaperService.getAllWallpapers(typeId);
         return ResponseEntity.ok(ApiResponse.success(wallpapers));
     }
 

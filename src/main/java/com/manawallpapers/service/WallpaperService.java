@@ -31,7 +31,7 @@ public class WallpaperService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<WallpaperResponse> getAllWallpapers(Pageable pageable, UUID typeId, Boolean free) {
+    public List<WallpaperResponse> getAllWallpapers(UUID typeId) {
         List<Wallpaper> wallpapers = wallpaperRepository.findByTypeId(typeId);
         List<WallpaperResponse> response;
         wallpapers.forEach(wallpaper -> {
@@ -42,12 +42,15 @@ public class WallpaperService {
             wallpaperResponse.setIsFree(wallpaper.getIsFree());
             wallpaperResponse.setResolution(wallpaper.getResolution());
             wallpaperResponse.setFormat(wallpaper.getFormat());
-//            LookupDto lookupDto = new LookupDto();
-//            wallpaperResponse.setCategory(wallpaper.getTitle());
-            wallpaperResponse.setTitle(wallpaper.getTitle());
+            wallpaperResponse.setCategory(new LookupDto(wallpaper.getCategory().getId(), wallpaper.getCategory().getName()));
+            wallpaperResponse.setSubCategory(new LookupDto(wallpaper.getSubCategory().getId(), wallpaper.getSubCategory().getName()));
+            wallpaperResponse.setMiniSubCategory(new LookupDto(wallpaper.getMiniSubCategory().getId(), wallpaper.getMiniSubCategory().getName()));
+            wallpaperResponse.setCreatedAt(wallpaper.getCreatedAt());
+            wallpaperResponse.setUpdatedAt(wallpaper.getUpdatedAt());
+            response.add(wallpaperResponse)
         });
 
-        return null;
+        return response;
     }
 
     public WallpaperDto getWallpaperById(UUID id) {
