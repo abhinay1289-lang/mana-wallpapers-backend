@@ -46,6 +46,7 @@ public class WallpaperService {
             wallpaperResponse.setCategory(new LookupDto(wallpaper.getCategory().getId(), wallpaper.getCategory().getName()));
             wallpaperResponse.setSubCategory(new LookupDto(wallpaper.getSubCategory().getId(), wallpaper.getSubCategory().getName()));
             wallpaperResponse.setMiniSubCategory(new LookupDto(wallpaper.getMiniSubCategory().getId(), wallpaper.getMiniSubCategory().getName()));
+            wallpaperResponse.setTags(wallpaper.getTags());
             wallpaperResponse.setCreatedAt(wallpaper.getCreatedAt());
             wallpaperResponse.setUpdatedAt(wallpaper.getUpdatedAt());
             response.add(wallpaperResponse);

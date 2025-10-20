@@ -22,6 +22,7 @@ public class WallpaperResponse {
     private LookupDto category;
     private LookupDto subCategory;
     private LookupDto miniSubCategory;
+    private String tags;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 

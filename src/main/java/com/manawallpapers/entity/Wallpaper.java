@@ -70,6 +70,9 @@ public class Wallpaper {
     @JoinColumn(name = "uploader_id", nullable = false)
     private User uploader;
 
+    @Column(name = "tags")
+    private String tags;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
