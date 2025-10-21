@@ -2,18 +2,10 @@ package com.manawallpapers.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manawallpapers.dto.*;
-import com.manawallpapers.entity.MiniSubCategory;
 import com.manawallpapers.entity.User;
 import com.manawallpapers.security.CustomUserDetails;
 import com.manawallpapers.service.WallpaperService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,8 +40,8 @@ public class WallpaperController {
     }
 
     @GetMapping("/all-category")
-    public ResponseEntity<ApiResponse<List<AllCategoriesListResponse>>> getAllCategoriesAndSubCategories() {
-        List<AllCategoriesListResponse> wallpaper = wallpaperService.getAllCategoriesAndSubCategories();
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAllCategoriesAndSubCategories() {
+        List<CategoryDto> wallpaper = wallpaperService.getAllCategoriesAndSubCategories();
         return ResponseEntity.ok(ApiResponse.success(wallpaper));
     }
 

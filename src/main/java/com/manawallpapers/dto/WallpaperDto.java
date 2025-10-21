@@ -21,10 +21,9 @@ public class WallpaperDto {
     private Boolean isFree;
     private String resolution;
     private String format;
+    private String tags;
     private UUID uploadedBy;
     private UUID category;
-    private UUID subCategory;
-    private UUID miniSubCategory;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 

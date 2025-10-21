@@ -22,7 +22,7 @@ public interface WallpaperRepository extends JpaRepository<Wallpaper, UUID> {
 
     Page<Wallpaper> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-    @Query(value = "SELECT * FROM wallpapers WHERE category_id = :id OR sub_category_id = :id  OR mini_sub_category_id = :id",nativeQuery = true)
+    @Query(value = "SELECT * FROM wallpapers WHERE category_id = :id",nativeQuery = true)
     List<Wallpaper> findByTypeId(UUID id);
 
 }

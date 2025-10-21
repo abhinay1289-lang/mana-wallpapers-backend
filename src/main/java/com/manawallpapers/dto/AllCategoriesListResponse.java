@@ -11,6 +11,5 @@ import java.util.UUID;
 public class AllCategoriesListResponse {
 private UUID id;
 private String name;
-private List<SubCategoryDto> subCategories;
-
+private List<WallpaperDto> wallpapers;
 }

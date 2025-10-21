@@ -22,4 +22,7 @@ public class Category {
     @NotBlank
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "display_image_url")
+    private String imageUrl;
 }

@@ -25,10 +25,6 @@ public class WallpaperService {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private SubCategoryRepository subCategoryRepository;
-    @Autowired
-    private MiniSubCategoryRepository miniSubCategoryRepository;
-    @Autowired
     private UserRepository userRepository;
 
     public List<WallpaperResponse> getAllWallpapers(UUID typeId) {
@@ -44,8 +40,6 @@ public class WallpaperService {
             wallpaperResponse.setFormat(wallpaper.getFormat());
             wallpaperResponse.setFileKey(wallpaper.getFileKey());
             wallpaperResponse.setCategory(new LookupDto(wallpaper.getCategory().getId(), wallpaper.getCategory().getName()));
-            wallpaperResponse.setSubCategory(new LookupDto(wallpaper.getSubCategory().getId(), wallpaper.getSubCategory().getName()));
-            wallpaperResponse.setMiniSubCategory(new LookupDto(wallpaper.getMiniSubCategory().getId(), wallpaper.getMiniSubCategory().getName()));
             wallpaperResponse.setTags(wallpaper.getTags());
             wallpaperResponse.setCreatedAt(wallpaper.getCreatedAt());
             wallpaperResponse.setUpdatedAt(wallpaper.getUpdatedAt());
@@ -62,75 +56,75 @@ public class WallpaperService {
         return convertToDto(wallpaper);
     }
 
-    public List<AllCategoriesListResponse> getAllCategoriesAndSubCategories() {
-        List<MiniSubCategory> categories = miniSubCategoryRepository.findAll();
-        return mapToCategoryDto(categories);
+    public List<CategoryDto> getAllCategoriesAndSubCategories() {
+        List<CategoryDto> list = new ArrayList<>();
+        List<Category> categories = categoryRepository.findAll();
+        categories.forEach(category -> {
+            CategoryDto categoryDto = new CategoryDto();
+            categoryDto.setId(category.getId());
+            categoryDto.setName(category.getName());
+            categoryDto.setImageUrl(category.getImageUrl());
+            list.add(categoryDto);
+        });
+        return list;
     }
 
-    public List<AllCategoriesListResponse> mapToCategoryDto(List<MiniSubCategory> miniCategoryBos) {
-
-        // Group MiniCategoryBos by SubCategoryBo
-        Map<SubCategory, List<MiniSubCategory>> miniBySubCategory = miniCategoryBos.stream()
-                .collect(Collectors.groupingBy(MiniSubCategory::getSubCategory));
-
-        // Map each SubCategoryBo to SubCategoryDto with its Minis as items
-        Map<Category, List<SubCategoryDto>> subCategoriesByCategory = new HashMap<>();
-
-        for (Map.Entry<SubCategory, List<MiniSubCategory>> entry : miniBySubCategory.entrySet()) {
-            SubCategory subCategoryBo = entry.getKey();
-            List<MiniSubCategory> miniList = entry.getValue();
-
-            // Convert MiniCategoryBos to ItemDtos
-            List<MiniSubCategoryDto> itemDtos = miniList.stream()
-                    .map(mini -> new MiniSubCategoryDto(mini.getId(), mini.getName()))
-                    .collect(Collectors.toList());
-
-            SubCategoryDto subCategoryDto = new SubCategoryDto(
-                    subCategoryBo.getId(),
-                    subCategoryBo.getName(),
-                    itemDtos
-            );
-            Category categoryBo = subCategoryBo.getCategory();
-
-            // Group subcategories by their parent CategoryBo
-            subCategoriesByCategory.computeIfAbsent(categoryBo, k -> new ArrayList<>())
-                    .add(subCategoryDto);
-        }
-
-        // Map each CategoryBo to CategoryDto with its SubCategories
-        return subCategoriesByCategory.entrySet().stream()
-                .map(entry -> {
-                    Category categoryBo = entry.getKey();
-                    List<SubCategoryDto> subCategoryDtos = entry.getValue();
-
-                    return new AllCategoriesListResponse(
-                            categoryBo.getId(),
-                            categoryBo.getName(),
-                            subCategoryDtos
-                    );
-                })
-                .collect(Collectors.toList());
-    }
+//    public List<AllCategoriesListResponse> mapToCategoryDto(List<Category> miniCategoryBos) {
+//
+//        // Group MiniCategoryBos by SubCategoryBo
+////        Map<SubCategory, List<MiniSubCategory>> miniBySubCategory = miniCategoryBos.stream()
+////                .collect(Collectors.groupingBy(MiniSubCategory::getSubCategory));
+//
+//        // Map each SubCategoryBo to SubCategoryDto with its Minis as items
+//        Map<Category, List<SubCategoryDto>> subCategoriesByCategory = new HashMap<>();
+//
+//        for (Map.Entry<SubCategory, List<MiniSubCategory>> entry : miniBySubCategory.entrySet()) {
+//            SubCategory subCategoryBo = entry.getKey();
+//            List<MiniSubCategory> miniList = entry.getValue();
+//
+//            // Convert MiniCategoryBos to ItemDtos
+//            List<MiniSubCategoryDto> itemDtos = miniList.stream()
+//                    .map(mini -> new MiniSubCategoryDto(mini.getId(), mini.getName()))
+//                    .collect(Collectors.toList());
+//
+//            SubCategoryDto subCategoryDto = new SubCategoryDto(
+//                    subCategoryBo.getId(),
+//                    subCategoryBo.getName(),
+//                    itemDtos
+//            );
+//            Category categoryBo = subCategoryBo.getCategory();
+//
+//            // Group subcategories by their parent CategoryBo
+//            subCategoriesByCategory.computeIfAbsent(categoryBo, k -> new ArrayList<>())
+//                    .add(subCategoryDto);
+//        }
+//
+//        // Map each CategoryBo to CategoryDto with its SubCategories
+//        return subCategoriesByCategory.entrySet().stream()
+//                .map(entry -> {
+//                    Category categoryBo = entry.getKey();
+//                    List<SubCategoryDto> subCategoryDtos = entry.getValue();
+//
+//                    return new AllCategoriesListResponse(
+//                            categoryBo.getId(),
+//                            categoryBo.getName(),
+//                            subCategoryDtos
+//                    );
+//                })
+//                .collect(Collectors.toList());
+//    }
 
     public List<MiniSubCategoryDto> getAllMiniSubCategories() {
         List<MiniSubCategoryDto> subCategoryDtos = new ArrayList<>();
-        List<MiniSubCategory> categories = miniSubCategoryRepository.findAll();
-        categories.forEach(category -> {
-            MiniSubCategoryDto categoryDto = new MiniSubCategoryDto();
-            categoryDto.setId(category.getId());
-            categoryDto.setName(category.getName());
-            subCategoryDtos.add(categoryDto);
-        });
+
         return subCategoryDtos;
     }
 
     public WallpaperDto createWallpaper(WallpaperDto dto, MultipartFile imageFile) {
         Wallpaper wallpaper = new Wallpaper();
         Category category = categoryRepository.findById(dto.getCategory()).get();
-        SubCategory subCategory = subCategoryRepository.findById(dto.getSubCategory()).get();
-        MiniSubCategory miniSubCategory = miniSubCategoryRepository.findById(dto.getMiniSubCategory()).get();
         Optional<User> user  = userRepository.findById(dto.getUploadedBy());
-        String path = category.getName().replace(" ", "-") +"/"+ subCategory.getName() +"/"+ miniSubCategory.getName();
+        String path = category.getName().replace(" ", "-");
         String fileKey = storageService.uploadFile(imageFile,path);
         wallpaper.setTitle(dto.getTitle());
         wallpaper.setDescription(dto.getDescription());
@@ -142,8 +136,7 @@ public class WallpaperService {
         wallpaper.setResolution(dto.getResolution());
         wallpaper.setFormat(dto.getFormat());
         wallpaper.setCategory(category);
-        wallpaper.setSubCategory(subCategory);
-        wallpaper.setMiniSubCategory(miniSubCategory);
+        wallpaper.setTags(dto.getTags());
         if(user.isPresent()){
             wallpaper.setUploader(user.get());
         }
