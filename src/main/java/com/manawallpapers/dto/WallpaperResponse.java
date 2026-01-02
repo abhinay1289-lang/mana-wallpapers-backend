@@ -20,6 +20,8 @@ public class WallpaperResponse {
     private String format;
     private String fileKey;
     private LookupDto category;
+    private Boolean isSaved;
+    private Boolean isLiked;
     private String tags;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;

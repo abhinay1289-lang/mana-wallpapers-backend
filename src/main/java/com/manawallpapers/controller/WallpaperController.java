@@ -83,4 +83,16 @@ public class WallpaperController {
 //        String uploadUrl = wallpaperService.generateUploadUrl(filename);
         return ResponseEntity.ok(ApiResponse.success("Upload URL generated", ""));
     }
+
+    @PatchMapping("/saved")
+    public ResponseEntity<ApiResponse<String>> saveWallpaper(@RequestBody SaveOrLikeWallpaperRequest saveOrLikeWallpaperRequest){
+        wallpaperService.saveWallpaper(saveOrLikeWallpaperRequest.getId(),saveOrLikeWallpaperRequest.getIsLikedOrSaved());
+        return ResponseEntity.ok(ApiResponse.success("Wallpaper saved successfully", ""));
+    }
+
+    @PatchMapping("/liked")
+    public ResponseEntity<ApiResponse<String>> likeWallpaper(@RequestBody SaveOrLikeWallpaperRequest saveOrLikeWallpaperRequest){
+        wallpaperService.likeWallpaper(saveOrLikeWallpaperRequest.getId(), saveOrLikeWallpaperRequest.getIsLikedOrSaved());
+        return ResponseEntity.ok(ApiResponse.success("Wallpaper liked successfully", ""));
+    }
 }

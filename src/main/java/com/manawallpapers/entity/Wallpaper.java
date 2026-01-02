@@ -45,6 +45,12 @@ public class Wallpaper {
     @Column(name = "is_free", nullable = false)
     private Boolean isFree = false;
 
+    @Column(name = "is_liked", nullable = false)
+    private Boolean isLiked = false;
+
+    @Column(name = "is_saved", nullable = false)
+    private Boolean isSaved = false;
+
     @Column(name = "is_downloadable", nullable = false)
     private Boolean isDownloadable = true;
 

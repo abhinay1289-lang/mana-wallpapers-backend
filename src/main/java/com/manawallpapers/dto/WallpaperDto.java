@@ -20,6 +20,8 @@ public class WallpaperDto {
     private String currency;
     private Boolean isFree;
     private String resolution;
+    private Boolean isSaved;
+    private  Boolean isLiked;
     private String format;
     private String tags;
     private UUID uploadedBy;

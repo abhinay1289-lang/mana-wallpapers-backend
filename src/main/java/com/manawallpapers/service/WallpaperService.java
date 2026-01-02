@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class WallpaperService {
             wallpaperResponse.setTitle(wallpaper.getTitle());
             wallpaperResponse.setPriceCents(wallpaper.getPriceCents());
             wallpaperResponse.setIsFree(wallpaper.getIsFree());
+            wallpaperResponse.setIsSaved(wallpaper.getIsSaved());
+            wallpaperResponse.setIsLiked(wallpaper.getIsLiked());
             wallpaperResponse.setResolution(wallpaper.getResolution());
             wallpaperResponse.setFormat(wallpaper.getFormat());
             wallpaperResponse.setFileKey(wallpaper.getFileKey());
@@ -67,6 +70,22 @@ public class WallpaperService {
             list.add(categoryDto);
         });
         return list;
+    }
+
+    public void saveWallpaper(UUID id, Boolean isSaved){
+      Optional<Wallpaper> wallpaper =   wallpaperRepository.findById(id);
+        wallpaper.ifPresent(wallpaper1 -> {
+            wallpaper1.setIsSaved(isSaved);
+            wallpaperRepository.save(wallpaper1);
+        });
+    }
+
+    public void likeWallpaper(UUID id, Boolean isLiked){
+        Optional<Wallpaper> wallpaper =   wallpaperRepository.findById(id);
+        wallpaper.ifPresent(wallpaper1 -> {
+            wallpaper1.setIsLiked(isLiked);
+            wallpaperRepository.save(wallpaper1);
+        });
     }
 
 //    public List<AllCategoriesListResponse> mapToCategoryDto(List<Category> miniCategoryBos) {
@@ -174,6 +193,8 @@ public class WallpaperService {
         dto.setDescription(wallpaper.getDescription());
 //        dto.setFileKey(wallpaper.getFileKey());
         dto.setPriceCents(wallpaper.getPriceCents());
+        dto.setIsSaved(wallpaper.getIsSaved());
+        dto.setIsLiked(wallpaper.getIsLiked());
         dto.setCurrency(wallpaper.getCurrency());
         dto.setIsFree(wallpaper.getIsFree());
         dto.setResolution(wallpaper.getResolution());
